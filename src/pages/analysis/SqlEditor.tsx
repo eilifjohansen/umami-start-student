@@ -12,7 +12,7 @@ const defaultQuery = `SELECT
   website_id,
   name
 FROM 
-  \`team-researchops-prod-01d6.umami.public_website\`
+  \`fagtorsdag-prod-81a6.umami_student.public_website\`
 LIMIT 
   100;`;
 

@@ -741,7 +741,7 @@ const ChartsPage = () => {
             if (filter.column.startsWith('param_')) return;
 
             // Skip session columns for now as subquery doesn't join session table (to avoid complexity/errors)
-            // Ideally we should join public_session here too if filtering by browser/etc.
+            // Ideally we should join session here too if filtering by browser/etc.
             if (isSessionColumn(filter.column)) return;
 
             if (filter.interactive === true && filter.metabaseParam === true && filter.value) {
@@ -759,7 +759,7 @@ const ChartsPage = () => {
             return `ROUND(
               100.0 * COUNT(DISTINCT base_query.${column}) / NULLIF((
                 SELECT COUNT(DISTINCT ${column}) 
-                FROM \`team-researchops-prod-01d6.umami.public_website_event\`
+                FROM \`fagtorsdag-prod-81a6.umami_student.event\`
                 WHERE website_id = '${websiteId}'${subqueryFilters}
               ), 0)
             , 1) as ${quotedAlias}`;
@@ -767,7 +767,7 @@ const ChartsPage = () => {
             return `ROUND(
               100.0 * COUNT(DISTINCT base_query.${column}) / NULLIF((
                 SELECT COUNT(DISTINCT ${column})
-                FROM \`team-researchops-prod-01d6.umami.public_website_event\`
+                FROM \`fagtorsdag-prod-81a6.umami_student.event\`
                 WHERE website_id = '${websiteId}'${subqueryFilters}
               ), 0)
             , 1) as ${quotedAlias}`;
@@ -798,8 +798,8 @@ const ChartsPage = () => {
       f.column === 'created_at' && f.interactive === true && f.metabaseParam === true
     );
 
-    const fullWebsiteTable = '`team-researchops-prod-01d6.umami.public_website_event`';
-    const fullSessionTable = '`team-researchops-prod-01d6.umami.public_session`';
+    const fullWebsiteTable = '`fagtorsdag-prod-81a6.umami_student.event`';
+    const fullSessionTable = '`fagtorsdag-prod-81a6.umami_student.session`';
 
     const hasInteractiveFilters = filters.some(f => f.interactive === true && f.metabaseParam === true);
 
@@ -917,7 +917,7 @@ const ChartsPage = () => {
       sql += '    visit_id,\n';
       sql += '    MIN(created_at) AS first_event_time,\n';
       sql += '    CASE WHEN COUNT(*) > 1 THEN TIMESTAMP_DIFF(MAX(created_at), MIN(created_at), SECOND) ELSE 0 END AS duration_seconds\n';
-      sql += `  FROM \`team-researchops-prod-01d6.umami.public_website_event\`\n`;
+      sql += `  FROM \`fagtorsdag-prod-81a6.umami_student.event\`\n`;
       sql += `  WHERE website_id = '${config.website.id}'\n`;
 
       if (hasInteractiveDateFilter) {
@@ -1203,7 +1203,7 @@ const ChartsPage = () => {
         config.metrics.some(metric => metric.column?.startsWith('param_'));
 
       if (needsEventData) {
-        sql += 'LEFT JOIN `team-researchops-prod-01d6.umami_views.event_data` AS ed_view\n';
+        sql += 'LEFT JOIN `fagtorsdag-prod-81a6.umami_student.event_data` AS ed_view\n';
         sql += '  ON base_query.event_id = ed_view.website_event_id\n';
         sql += '  AND base_query.website_id = ed_view.website_id\n';
         sql += '  AND base_query.created_at = ed_view.created_at\n';

@@ -41,7 +41,7 @@ app.use('/api', (req, res, next) => {
 let bigquery;
 try {
     const bqConfig = {
-        projectId: 'fagtorsdag-prod-81a6-52ac69097f46',
+        projectId: 'fagtorsdag-prod-81a6',
     };
 
     // Priority order:
@@ -397,8 +397,8 @@ app.post('/api/bigquery/diagnosis', async (req, res) => {
                 COUNTIF(e.event_type = 1) as pageviews,
                 COUNTIF(e.event_type = 2) as custom_events,
                 MAX(e.created_at) as last_event_at
-            FROM \`team-researchops-prod-01d6.umami.public_website\` w
-            LEFT JOIN \`team-researchops-prod-01d6.umami.public_website_event\` e
+            FROM \`fagtorsdag-prod-81a6.umami_student.public_website\` w
+            LEFT JOIN \`fagtorsdag-prod-81a6.umami_student.event\` e
                 ON w.website_id = e.website_id
                 AND e.created_at BETWEEN @startDate AND @endDate
             GROUP BY 1, 2, 3
@@ -596,7 +596,7 @@ app.get('/api/bigquery/websites/:websiteId/events', async (req, res) => {
 
         const query = `
             SELECT event_name, COUNT(*) as count
-            FROM \`team-researchops-prod-01d6.umami.public_website_event\`
+            FROM \`fagtorsdag-prod-81a6.umami_student.event\`
             WHERE website_id = @websiteId
               AND created_at BETWEEN @startDate AND @endDate
               AND event_name IS NOT NULL
@@ -714,8 +714,8 @@ app.get('/api/bigquery/websites/:websiteId/event-properties', async (req, res) =
                     WHEN p.data_type = 4 THEN 'date'
                     ELSE 'string'
                 END AS type
-            FROM \`team-researchops-prod-01d6.umami.public_website_event\` e
-            JOIN \`team-researchops-prod-01d6.umami_views.event_data\` d
+            FROM \`fagtorsdag-prod-81a6.umami_student.event\` e
+            JOIN \`fagtorsdag-prod-81a6.umami_student.event_data\` d
                 ON e.event_id = d.website_event_id
                 AND e.website_id = d.website_id
                 AND e.created_at = d.created_at
@@ -739,7 +739,7 @@ app.get('/api/bigquery/websites/:websiteId/event-properties', async (req, res) =
             SELECT 
                 event_name,
                 COUNT(*) AS total
-            FROM \`team-researchops-prod-01d6.umami.public_website_event\` e
+            FROM \`fagtorsdag-prod-81a6.umami_student.event\` e
             WHERE website_id = @websiteId
             AND created_at BETWEEN @startDate AND @endDate
             AND event_name IS NOT NULL
@@ -870,7 +870,7 @@ app.get('/api/bigquery/websites/:websiteId/event-series', async (req, res) => {
             SELECT
                 TIMESTAMP_TRUNC(created_at, ${timeTrunc}) as time,
                 COUNT(*) as count
-            FROM \`team-researchops-prod-01d6.umami.public_website_event\`
+            FROM \`fagtorsdag-prod-81a6.umami_student.event\`
             WHERE website_id = @websiteId
             AND created_at BETWEEN @startDate AND @endDate
             AND event_name IS NOT NULL
@@ -923,7 +923,7 @@ app.get('/api/bigquery/websites/:websiteId/daterange', async (req, res) => {
             SELECT 
                 MIN(created_at) as mindate,
                 MAX(created_at) as maxdate
-            FROM \`team-researchops-prod-01d6.umami.public_website_event\`
+            FROM \`fagtorsdag-prod-81a6.umami_student.event\`
             WHERE website_id = @websiteId
         `;
 
@@ -1003,8 +1003,8 @@ app.get('/api/bigquery/websites/:websiteId/event-parameter-values', async (req, 
             SELECT
                 p.string_value,
                 COUNT(*) as count
-            FROM \`team-researchops-prod-01d6.umami.public_website_event\` e
-            JOIN \`team-researchops-prod-01d6.umami_views.event_data\` d
+            FROM \`fagtorsdag-prod-81a6.umami_student.event\` e
+            JOIN \`fagtorsdag-prod-81a6.umami_student.event_data\` d
                 ON e.event_id = d.website_event_id
                 AND e.website_id = d.website_id
                 AND e.created_at = d.created_at
@@ -1112,8 +1112,8 @@ app.get('/api/bigquery/websites/:websiteId/event-latest', async (req, res) => {
                 e.event_id,
                 e.created_at,
                 ARRAY_AGG(STRUCT(p.data_key, p.string_value) ORDER BY p.data_key) as parameters
-            FROM \`team-researchops-prod-01d6.umami.public_website_event\` e
-            JOIN \`team-researchops-prod-01d6.umami_views.event_data\` d
+            FROM \`fagtorsdag-prod-81a6.umami_student.event\` e
+            JOIN \`fagtorsdag-prod-81a6.umami_student.event_data\` d
                 ON e.event_id = d.website_event_id
                 AND e.website_id = d.website_id
                 AND e.created_at = d.created_at
@@ -1256,7 +1256,7 @@ app.get('/api/bigquery/websites/:websiteId/traffic-series', async (req, res) => 
                             ) THEN TRUE
                             ELSE FALSE
                         END AS has_visited
-                    FROM \`team-researchops-prod-01d6.umami_views.event\`
+                    FROM \`fagtorsdag-prod-81a6.umami_student.event\`
                     WHERE website_id = @websiteId
                     AND created_at BETWEEN @startDate AND @endDate
                     AND event_type = 1 -- Pageview
@@ -1294,7 +1294,7 @@ app.get('/api/bigquery/websites/:websiteId/traffic-series', async (req, res) => 
                 SELECT
                     TIMESTAMP_TRUNC(created_at, ${timeTrunc}) as time,
                     ${countExpression} as count
-                FROM \`team-researchops-prod-01d6.umami_views.event\`
+                FROM \`fagtorsdag-prod-81a6.umami_student.event\`
                 WHERE website_id = @websiteId
                 AND created_at BETWEEN @startDate AND @endDate
                 AND event_type = 1 -- Pageview
@@ -1388,7 +1388,7 @@ app.get('/api/bigquery/websites/:websiteId/traffic-flow', async (req, res) => {
             proportionCTE = `
                 total_site_visitors AS (
                     SELECT COUNT(DISTINCT session_id) as total_count
-                    FROM \`team-researchops-prod-01d6.umami_views.event\`
+                    FROM \`fagtorsdag-prod-81a6.umami_student.event\`
                     WHERE website_id = @websiteId
                       AND created_at BETWEEN @startDate AND @endDate
                       AND event_type = 1 -- Pageview
@@ -1420,7 +1420,7 @@ app.get('/api/bigquery/websites/:websiteId/traffic-flow', async (req, res) => {
                             ELSE RTRIM(REGEXP_REPLACE(REGEXP_REPLACE(url_path, r'[?#].*', ''), r'//+', '/'), '/')
                         END as url_path,
                         created_at
-                    FROM \`team-researchops-prod-01d6.umami_views.event\`
+                    FROM \`fagtorsdag-prod-81a6.umami_student.event\`
                     WHERE website_id = @websiteId
                       AND created_at BETWEEN @startDate AND @endDate
                       AND event_type = 1 -- Pageview
@@ -1468,7 +1468,7 @@ app.get('/api/bigquery/websites/:websiteId/traffic-flow', async (req, res) => {
                         END as url_path,
                         created_at,
                         ROW_NUMBER() OVER (PARTITION BY session_id ORDER BY created_at) as rn
-                    FROM \`team-researchops-prod-01d6.umami_views.event\`
+                    FROM \`fagtorsdag-prod-81a6.umami_student.event\`
                     WHERE website_id = @websiteId
                       AND created_at BETWEEN @startDate AND @endDate
                       AND event_type = 1 -- Pageview
@@ -1574,7 +1574,7 @@ app.get('/api/bigquery/websites', async (req, res) => {
                 ANY_VALUE(share_id) as shareId,
                 ANY_VALUE(team_id) as teamId,
                 ANY_VALUE(created_at) as createdAt
-            FROM \`team-researchops-prod-01d6.umami.public_website\`
+            FROM \`fagtorsdag-prod-81a6.umami_student.public_website\`
             WHERE deleted_at IS NULL
               AND name IS NOT NULL
             GROUP BY website_id
@@ -1652,7 +1652,7 @@ app.post('/api/bigquery/journeys', async (req, res) => {
                         THEN created_at 
                     END) 
                         OVER (PARTITION BY session_id) AS start_time
-                FROM \`team-researchops-prod-01d6.umami.public_website_event\`
+                FROM \`fagtorsdag-prod-81a6.umami_student.event\`
                 WHERE website_id = @websiteId
                     AND created_at BETWEEN @startDate AND @endDate
                     AND event_type = 1 -- Pageview
@@ -1969,7 +1969,7 @@ app.post('/api/bigquery/funnel', async (req, res) => {
                     END as step_value,
                     ${normalizeUrlSql} as url_path_normalized,
                     created_at
-                FROM \`team-researchops-prod-01d6.umami.public_website_event\`
+                FROM \`fagtorsdag-prod-81a6.umami_student.event\`
                 WHERE website_id = @websiteId
                   AND created_at BETWEEN @startDate AND @endDate
                   AND event_type IN (${eventTypesList})
@@ -2016,7 +2016,7 @@ app.post('/api/bigquery/funnel', async (req, res) => {
 
                     return `EXISTS (
                         SELECT 1
-                        FROM \`team-researchops-prod-01d6.umami_views.event_data\` d_${index}_${pIdx}
+                        FROM \`fagtorsdag-prod-81a6.umami_student.event_data\` d_${index}_${pIdx}
                         CROSS JOIN UNNEST(d_${index}_${pIdx}.event_parameters) p_${index}_${pIdx}
                         WHERE d_${index}_${pIdx}.website_event_id = e.event_id
                           AND d_${index}_${pIdx}.website_id = e.website_id
@@ -2268,7 +2268,7 @@ app.get('/api/bigquery/websites/:websiteId/marketing-stats', async (req, res) =>
                 SELECT 
                     session_id,
                     ${cteColumns}
-                FROM \`team-researchops-prod-01d6.umami.public_website_event\`
+                FROM \`fagtorsdag-prod-81a6.umami_student.event\`
                 WHERE website_id = @websiteId
                 AND created_at BETWEEN @startDate AND @endDate
                 AND created_at BETWEEN @startDate AND @endDate
@@ -2466,7 +2466,7 @@ app.post('/api/bigquery/funnel-timing', async (req, res) => {
                     session_id,
                     ${normalizeUrlSql} as url_path,
                     created_at
-                FROM \`team-researchops-prod-01d6.umami.public_website_event\`
+                FROM \`fagtorsdag-prod-81a6.umami_student.event\`
                 WHERE website_id = @websiteId
                   AND created_at BETWEEN @startDate AND @endDate
                   AND event_type = 1
@@ -2624,7 +2624,7 @@ app.post('/api/bigquery/retention', async (req, res) => {
                                 '/'),
             ''),
         '/') AS url_path_clean
-                FROM \`team-researchops-prod-01d6.umami.public_website_event\`
+                FROM \`fagtorsdag-prod-81a6.umami_student.event\`
                 WHERE website_id = @websiteId
                     AND created_at BETWEEN @startDate AND @endDate
             ),
@@ -2804,13 +2804,13 @@ app.post('/api/bigquery/composition', async (req, res) => {
                     s.screen,
                     s.language,
                     s.country
-                FROM \`team-researchops-prod-01d6.umami.public_session\` s
+                FROM \`fagtorsdag-prod-81a6.umami_student.session\` s
                 WHERE s.website_id = @websiteId
                   AND s.created_at BETWEEN @startDate AND @endDate
                   ${urlPath ? `
                   AND EXISTS (
                     SELECT 1 
-                    FROM \`team-researchops-prod-01d6.umami.public_website_event\` e 
+                    FROM \`fagtorsdag-prod-81a6.umami_student.event\` e 
                     WHERE e.session_id = s.session_id 
                       AND e.website_id = @websiteId
                       AND e.created_at BETWEEN @startDate AND @endDate
@@ -2943,20 +2943,20 @@ app.post('/api/bigquery/privacy-check', async (req, res) => {
 
         // Tables and columns to check
         const checks = [
-            // public_website_event
-            { table: 'public_website_event', column: 'url_path' },
-            { table: 'public_website_event', column: 'url_query' },
-            { table: 'public_website_event', column: 'referrer_path' },
-            { table: 'public_website_event', column: 'referrer_query' },
-            { table: 'public_website_event', column: 'referrer_domain' },
-            { table: 'public_website_event', column: 'page_title' },
-            { table: 'public_website_event', column: 'event_name' },
-            // public_session
-            { table: 'public_session', column: 'hostname' },
-            { table: 'public_session', column: 'browser' },
-            { table: 'public_session', column: 'os' },
-            { table: 'public_session', column: 'device' },
-            { table: 'public_session', column: 'city' },
+            // event
+            { table: 'event', column: 'url_path' },
+            { table: 'event', column: 'url_query' },
+            { table: 'event', column: 'referrer_path' },
+            { table: 'event', column: 'referrer_query' },
+            { table: 'event', column: 'referrer_domain' },
+            { table: 'event', column: 'page_title' },
+            { table: 'event', column: 'event_name' },
+            // session
+            { table: 'session', column: 'hostname' },
+            { table: 'session', column: 'browser' },
+            { table: 'session', column: 'os' },
+            { table: 'session', column: 'device' },
+            { table: 'session', column: 'city' },
 
         ];
 
@@ -2965,7 +2965,7 @@ app.post('/api/bigquery/privacy-check', async (req, res) => {
         if (!websiteId) {
             try {
                 const [siteRows] = await bigquery.query(addAuditLogging({
-                    query: `SELECT website_id, name FROM \`team-researchops-prod-01d6.umami.public_website\``
+                    query: `SELECT website_id, name FROM \`fagtorsdag-prod-81a6.umami_student.public_website\``
                 }, navIdent, 'Personvernssjekk'));
                 siteRows.forEach(r => websiteMap.set(r.website_id, r.name));
             } catch (e) {
@@ -2994,7 +2994,7 @@ app.post('/api/bigquery/privacy-check', async (req, res) => {
                             ${type === 'E-post' ? `COUNT(DISTINCT CASE WHEN REGEXP_CONTAINS(${check.column}, r'@nav') THEN ${check.column} END)` : '0'} as unique_nav_count,
                             ${type === 'E-post' ? `COUNT(DISTINCT CASE WHEN NOT REGEXP_CONTAINS(${check.column}, r'@nav') THEN ${check.column} END)` : '0'} as unique_other_count,
                             ARRAY_AGG(DISTINCT ${check.column} LIMIT 5) as examples
-                        FROM \`team-researchops-prod-01d6.umami.${check.table}\`
+                        FROM \`fagtorsdag-prod-81a6.umami_student.${check.table}\`
                         WHERE website_id = @websiteId
                         AND created_at BETWEEN @startDate AND @endDate
                         AND REGEXP_CONTAINS(${check.column}, r'${pattern}')
@@ -3014,7 +3014,7 @@ app.post('/api/bigquery/privacy-check', async (req, res) => {
                             ${type === 'E-post' ? `COUNT(DISTINCT CASE WHEN REGEXP_CONTAINS(${check.column}, r'@nav') THEN ${check.column} END)` : '0'} as unique_nav_count,
                             ${type === 'E-post' ? `COUNT(DISTINCT CASE WHEN NOT REGEXP_CONTAINS(${check.column}, r'@nav') THEN ${check.column} END)` : '0'} as unique_other_count,
                             ARRAY_AGG(DISTINCT ${check.column} LIMIT 5) as examples
-                        FROM \`team-researchops-prod-01d6.umami.${check.table}\`
+                        FROM \`fagtorsdag-prod-81a6.umami_student.${check.table}\`
                         WHERE created_at BETWEEN @startDate AND @endDate
                         AND REGEXP_CONTAINS(${check.column}, r'${pattern}')
                         ${extraFilter}
@@ -3043,8 +3043,8 @@ app.post('/api/bigquery/privacy-check', async (req, res) => {
                         ${type === 'E-post' ? `COUNT(DISTINCT CASE WHEN REGEXP_CONTAINS(p.string_value, r'@nav') THEN p.string_value END)` : '0'} as unique_nav_count,
                         ${type === 'E-post' ? `COUNT(DISTINCT CASE WHEN NOT REGEXP_CONTAINS(p.string_value, r'@nav') THEN p.string_value END)` : '0'} as unique_other_count,
                         ARRAY_AGG(DISTINCT p.string_value LIMIT 5) as examples
-                    FROM \`team-researchops-prod-01d6.umami.public_website_event\` e
-                    JOIN \`team-researchops-prod-01d6.umami_views.event_data\` d
+                    FROM \`fagtorsdag-prod-81a6.umami_student.event\` e
+                    JOIN \`fagtorsdag-prod-81a6.umami_student.event_data\` d
                         ON e.event_id = d.website_event_id
                         AND e.website_id = d.website_id
                         AND e.created_at = d.created_at
@@ -3068,8 +3068,8 @@ app.post('/api/bigquery/privacy-check', async (req, res) => {
                         ${type === 'E-post' ? `COUNT(DISTINCT CASE WHEN REGEXP_CONTAINS(p.string_value, r'@nav') THEN p.string_value END)` : '0'} as unique_nav_count,
                         ${type === 'E-post' ? `COUNT(DISTINCT CASE WHEN NOT REGEXP_CONTAINS(p.string_value, r'@nav') THEN p.string_value END)` : '0'} as unique_other_count,
                         ARRAY_AGG(DISTINCT p.string_value LIMIT 5) as examples
-                    FROM \`team-researchops-prod-01d6.umami.public_website_event\` e
-                    JOIN \`team-researchops-prod-01d6.umami_views.event_data\` d
+                    FROM \`fagtorsdag-prod-81a6.umami_student.event\` e
+                    JOIN \`fagtorsdag-prod-81a6.umami_student.event_data\` d
                         ON e.event_id = d.website_event_id
                         AND e.website_id = d.website_id
                         AND e.created_at = d.created_at
@@ -3232,7 +3232,7 @@ app.post('/api/bigquery/users', async (req, res) => {
             urlFilterCTE = `
                 matching_sessions AS (
                     SELECT DISTINCT session_id
-                    FROM \`team-researchops-prod-01d6.umami.public_website_event\`
+                    FROM \`fagtorsdag-prod-81a6.umami_student.event\`
                     WHERE website_id = @websiteId
                     AND created_at BETWEEN @startDate AND @endDate
                     AND (
@@ -3259,7 +3259,7 @@ app.post('/api/bigquery/users', async (req, res) => {
                     ANY_VALUE(session.os) as os,
                     ANY_VALUE(session.browser) as browser,
                     COUNT(*) as event_count
-                FROM \`team-researchops-prod-01d6.umami_views.session\` as session
+                FROM \`fagtorsdag-prod-81a6.umami_student.session\` as session
                 ${urlFilterJoin}
                 WHERE session.website_id = @websiteId
                 AND session.created_at BETWEEN @startDate AND @endDate
@@ -3289,7 +3289,7 @@ app.post('/api/bigquery/users', async (req, res) => {
             WITH ${urlFilterCTE}
             filtered_sessions AS (
                 SELECT DISTINCT session.session_id
-                FROM \`team-researchops-prod-01d6.umami_views.session\` as session
+                FROM \`fagtorsdag-prod-81a6.umami_student.session\` as session
                 ${urlFilterJoin}
                 WHERE session.website_id = @websiteId
                 AND session.created_at BETWEEN @startDate AND @endDate
@@ -3369,7 +3369,7 @@ app.post('/api/bigquery/diagnosis-history', async (req, res) => {
                 FORMAT_TIMESTAMP('%Y-%m', created_at) as month,
                 COUNTIF(event_type = 1) as pageviews,
                 COUNTIF(event_type = 2) as custom_events
-            FROM \`team-researchops-prod-01d6.umami.public_website_event\`
+            FROM \`fagtorsdag-prod-81a6.umami_student.event\`
             WHERE website_id = @websiteId
               AND created_at >= TIMESTAMP(DATE_SUB(CURRENT_DATE(), INTERVAL 6 MONTH))
             GROUP BY 1
@@ -3379,7 +3379,7 @@ app.post('/api/bigquery/diagnosis-history', async (req, res) => {
         // Query 2: Absolute last event timestamp
         const lastEventQuery = `
             SELECT MAX(created_at) as last_event_at
-            FROM \`team-researchops-prod-01d6.umami.public_website_event\`
+            FROM \`fagtorsdag-prod-81a6.umami_student.event\`
             WHERE website_id = @websiteId
         `;
 
@@ -3491,7 +3491,7 @@ app.post('/api/bigquery/users/:sessionId/activity', async (req, res) => {
                 event_name,
                 url_path,
                 page_title
-            FROM \`team-researchops-prod-01d6.umami_views.event\`
+            FROM \`fagtorsdag-prod-81a6.umami_student.event\`
             WHERE website_id = @websiteId
             AND session_id = @sessionId
             AND created_at BETWEEN @startDate AND @endDate
@@ -3611,8 +3611,8 @@ app.post('/api/bigquery/event-journeys', async (req, res) => {
                         END, 
                         '||' ORDER BY CASE WHEN p.data_key IN ('lenketekst', 'tittel') THEN 0 ELSE 1 END, p.data_key
                     ) as props_str
-                FROM \`team-researchops-prod-01d6.umami.public_website_event\` e
-                LEFT JOIN \`team-researchops-prod-01d6.umami_views.event_data\` d
+                FROM \`fagtorsdag-prod-81a6.umami_student.event\` e
+                LEFT JOIN \`fagtorsdag-prod-81a6.umami_student.event_data\` d
                     ON e.event_id = d.website_event_id
                     AND e.website_id = d.website_id
                     AND e.created_at = d.created_at
@@ -3679,7 +3679,7 @@ app.post('/api/bigquery/event-journeys', async (req, res) => {
                 SELECT 
                     e.session_id, 
                     MIN(e.created_at) as visit_time
-                FROM \`team-researchops-prod-01d6.umami.public_website_event\` e
+                FROM \`fagtorsdag-prod-81a6.umami_student.event\` e
                 WHERE e.website_id = @websiteId
                 AND e.created_at BETWEEN @startDate AND @endDate
                 AND e.event_name IS NULL -- Pageview
@@ -3688,7 +3688,7 @@ app.post('/api/bigquery/event-journeys', async (req, res) => {
             ),
             Interactions AS (
                 SELECT DISTINCT e.session_id
-                FROM \`team-researchops-prod-01d6.umami.public_website_event\` e
+                FROM \`fagtorsdag-prod-81a6.umami_student.event\` e
                 WHERE e.website_id = @websiteId
                 AND e.created_at BETWEEN @startDate AND @endDate
                 AND e.event_name IS NOT NULL -- Events
@@ -3697,7 +3697,7 @@ app.post('/api/bigquery/event-journeys', async (req, res) => {
             Navigation AS (
                 SELECT DISTINCT t.session_id
                 FROM TargetVisits t
-                JOIN \`team-researchops-prod-01d6.umami.public_website_event\` later
+                JOIN \`fagtorsdag-prod-81a6.umami_student.event\` later
                     ON t.session_id = later.session_id
                     AND later.created_at BETWEEN @startDate AND @endDate
                     AND later.created_at > t.visit_time

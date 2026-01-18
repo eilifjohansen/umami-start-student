@@ -47,7 +47,7 @@ export default function Header() {
                 />
               </svg>
               <span className="text-2xl whitespace-nowrap text-white">
-                Umami
+                Umami Student
               </span>
             </div>
           </Button>
