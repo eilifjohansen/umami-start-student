@@ -41,7 +41,7 @@ app.use('/api', (req, res, next) => {
 let bigquery;
 try {
     const bqConfig = {
-        projectId: 'team-researchops-prod-01d6',
+        projectId: 'fagtorsdag-prod-81a6-52ac69097f46',
     };
 
     // Priority order:
