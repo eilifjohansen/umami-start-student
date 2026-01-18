@@ -48,7 +48,7 @@ try {
     // 1. GCP secret (bigquery-credentials from NAIS)
     // 2. Service account key file path from env (GOOGLE_APPLICATION_CREDENTIALS)
     // 3. Service account JSON from env (UMAMI_BIGQUERY)
-    // 4. Local service account key file (./service-account-key.json)
+    // 4. Local service account key file (./fagtorsdag-prod-81a6-52ac69097f46.json)
 
     if (process.env['bigquery-credentials']) {
         try {
@@ -69,7 +69,7 @@ try {
         }
     } else {
         // Try local service account key file
-        const localKeyPath = path.join(__dirname, 'service-account-key.json');
+        const localKeyPath = path.join(__dirname, 'fagtorsdag-prod-81a6-52ac69097f46.json');
         console.log('✓ Using local service account key file:', localKeyPath);
         bqConfig.keyFilename = localKeyPath;
     }
