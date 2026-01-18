@@ -22,11 +22,55 @@ export const PeriodPicker = ({
     endDate,
     onEndDateChange,
     showToday = false,
-    lastMonthLabel = 'Forrige måned',
-    currentMonthLabel = 'Denne måneden'
+    lastMonthLabel = 'November 2025',
+    currentMonthLabel = 'Desember 2025'
 }: PeriodPickerProps) => {
     const [fromInputValue, setFromInputValue] = useState<string>('');
     const [toInputValue, setToInputValue] = useState<string>('');
+
+    // Force student data periods
+    useEffect(() => {
+        if (period === 'current_month') {
+            onPeriodChange('custom');
+            onStartDateChange(new Date(2025, 11, 1));
+            onEndDateChange(new Date(2025, 11, 31));
+        } else if (period === 'last_month') {
+            onPeriodChange('custom');
+            onStartDateChange(new Date(2025, 10, 1));
+            onEndDateChange(new Date(2025, 10, 30));
+        }
+    }, [period, onPeriodChange, onStartDateChange, onEndDateChange]);
+
+    const getVisualPeriod = () => {
+        if (period === 'custom' && startDate && endDate) {
+            const isDec2025 = startDate.getFullYear() === 2025 && startDate.getMonth() === 11 && startDate.getDate() === 1 &&
+                endDate.getFullYear() === 2025 && endDate.getMonth() === 11 && endDate.getDate() === 31;
+
+            const isNov2025 = startDate.getFullYear() === 2025 && startDate.getMonth() === 10 && startDate.getDate() === 1 &&
+                endDate.getFullYear() === 2025 && endDate.getMonth() === 10 && endDate.getDate() === 30;
+
+            if (isDec2025) return 'current_month';
+            if (isNov2025) return 'last_month';
+        }
+        return period;
+    };
+
+    const handlePeriodChange = (val: string) => {
+        if (val === 'current_month') {
+            onPeriodChange('custom');
+            onStartDateChange(new Date(2025, 11, 1));
+            onEndDateChange(new Date(2025, 11, 31));
+        } else if (val === 'last_month') {
+            onPeriodChange('custom');
+            onStartDateChange(new Date(2025, 10, 1));
+            onEndDateChange(new Date(2025, 10, 30));
+        } else {
+            onPeriodChange(val);
+            // If switching to valid 'custom' without changing date, we keep dates? 
+            // Or if switching to 'today', parent might handle it? 
+            // 'today' isn't handled in my effect, but handled in parents usually as standard
+        }
+    };
 
     // Sync inputs when dates change externally (e.g. from calendar click)
     useEffect(() => {
@@ -49,8 +93,8 @@ export const PeriodPicker = ({
         <>
             <RadioGroup
                 legend="Periode"
-                value={period}
-                onChange={onPeriodChange}
+                value={getVisualPeriod()}
+                onChange={handlePeriodChange}
                 size="small"
             >
                 {showToday && <Radio value="today">I dag</Radio>}
@@ -59,7 +103,7 @@ export const PeriodPicker = ({
                 <Radio value="custom">Egendefinert</Radio>
             </RadioGroup>
 
-            {period === 'custom' && (
+            {period === 'custom' && getVisualPeriod() === 'custom' && (
                 <div className="mb-4 mt-2">
                     <DatePicker
                         mode="range"

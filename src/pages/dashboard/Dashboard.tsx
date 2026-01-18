@@ -66,7 +66,35 @@ const Dashboard = () => {
     // Determine default path operator from dashboard config or URL
     const defaultPathOperator = dashboard.defaultFilterValues?.pathOperator || pathOperator || "equals";
 
-    // Get initial URL paths: first check custom filter URL params, then fall back to path params
+    // Logic for student data (2025)
+    // Helper to get state based on range or student overrides
+    const getStudentDateState = (range: string | null) => {
+        if (range === 'last_month') {
+            return {
+                dateRange: 'custom',
+                startDate: new Date(2025, 10, 1),
+                endDate: new Date(2025, 10, 30)
+            };
+        }
+        // Default to current_month (Dec 2025) if current_month
+        if (range === 'current_month') {
+            return {
+                dateRange: 'custom',
+                startDate: new Date(2025, 11, 1),
+                endDate: new Date(2025, 11, 31)
+            };
+        }
+        // Fallback or explicit custom
+        return {
+            dateRange: range || 'current_month', // Default fallback
+            startDate: undefined,
+            endDate: undefined
+        };
+    };
+
+    const initialDateState = getStudentDateState(dateRangeFromUrl);
+
+    // Initial URL paths code (unchanged)
     const getInitialUrlPaths = (): string[] => {
         // Check if any custom filter has a URL param that maps to urlPath
         const initialCustomValues = getInitialCustomFilterValues();
@@ -86,12 +114,14 @@ const Dashboard = () => {
     // UI/Temp State
     const [tempPathOperator, setTempPathOperator] = useState(defaultPathOperator);
     const [tempUrlPaths, setTempUrlPaths] = useState<string[]>(initialUrlPathsFromCustomFilter);
-    const [tempDateRange, setTempDateRange] = useState(dateRangeFromUrl || "current_month");
+
+    // Initialize with student overrides if applicable
+    const [tempDateRange, setTempDateRange] = useState(initialDateState.dateRange);
     const [tempMetricType, setTempMetricType] = useState<'visitors' | 'pageviews' | 'proportion'>(metricTypeFromUrl || 'visitors');
 
-    // Custom date state
-    const [customStartDate, setCustomStartDate] = useState<Date | undefined>(undefined);
-    const [customEndDate, setCustomEndDate] = useState<Date | undefined>(undefined);
+    // Custom date state - initialized with student overrides
+    const [customStartDate, setCustomStartDate] = useState<Date | undefined>(initialDateState.startDate);
+    const [customEndDate, setCustomEndDate] = useState<Date | undefined>(initialDateState.endDate);
     const [isDateModalOpen, setIsDateModalOpen] = useState(false);
     const dateModalRef = useRef<HTMLDialogElement>(null);
 
@@ -99,9 +129,9 @@ const Dashboard = () => {
     const [activeFilters, setActiveFilters] = useState({
         pathOperator: defaultPathOperator,
         urlFilters: initialUrlPathsFromCustomFilter,
-        dateRange: dateRangeFromUrl || "current_month",
-        customStartDate: undefined as Date | undefined,
-        customEndDate: undefined as Date | undefined,
+        dateRange: initialDateState.dateRange,
+        customStartDate: initialDateState.startDate,
+        customEndDate: initialDateState.endDate,
         metricType: (metricTypeFromUrl || 'visitors') as 'visitors' | 'pageviews' | 'proportion'
     });
 
@@ -118,11 +148,28 @@ const Dashboard = () => {
     // Check for hidden filters and use effective websiteId
     const effectiveWebsiteId = websiteId || dashboard.defaultFilterValues?.websiteId;
 
-    // Helper function matching metadashboard.tsx logic
+    // Helper to mask custom 2025 dates as "current_month"/"last_month" in UI
+    const getVisualDateRange = () => {
+        if (tempDateRange === 'custom' && customStartDate && customEndDate) {
+            const isDec2025 = customStartDate.getFullYear() === 2025 && customStartDate.getMonth() === 11 && customStartDate.getDate() === 1 &&
+                customEndDate.getFullYear() === 2025 && customEndDate.getMonth() === 11 && customEndDate.getDate() === 31;
+
+            const isNov2025 = customStartDate.getFullYear() === 2025 && customStartDate.getMonth() === 10 && customStartDate.getDate() === 1 &&
+                customEndDate.getFullYear() === 2025 && customEndDate.getMonth() === 10 && customEndDate.getDate() === 30;
+
+            if (isDec2025) return 'current_month';
+            if (isNov2025) return 'last_month';
+        }
+        return tempDateRange;
+    };
+
+    // Helper matching metadashboard.tsx logic
     const normalizeDomain = (domain: string) => {
         if (domain === "www.nav.no") return domain;
         return domain.replace(/^www\./, "");
     };
+
+    // ... (rest of logic unchanged from lines 128-393) ...
 
     // Resolve domain to websiteId for external app compatibility
     useEffect(() => {
@@ -191,13 +238,16 @@ const Dashboard = () => {
     // Auto-apply filters when coming from an external link with paths
     useEffect(() => {
         if (!hasAutoAppliedFilters && selectedWebsite && initialPaths.length > 0) {
+            // Reuse student logic for date range
+            const autoDateState = getStudentDateState("current_month");
+
             // Auto-apply filters without requiring user to click "Oppdater"
             setActiveFilters({
                 pathOperator: pathOperator || "equals",
                 urlFilters: initialPaths.map(p => normalizeUrlToPath(p)), // Apply normalizeUrlToPath here
-                dateRange: "current_month",
-                customStartDate: undefined,
-                customEndDate: undefined,
+                dateRange: autoDateState.dateRange,
+                customStartDate: autoDateState.startDate,
+                customEndDate: autoDateState.endDate,
                 metricType: metricTypeFromUrl || 'visitors'
             });
             setHasAutoAppliedFilters(true);
@@ -311,8 +361,10 @@ const Dashboard = () => {
         }
 
         // Always update dateRange in URL (if not default)
-        if (tempDateRange !== 'current_month') {
-            url.searchParams.set('periode', tempDateRange);
+        // Check visual range so we use nice params if possible (though we force 2025 overrides mostly)
+        const visualRange = getVisualDateRange();
+        if (visualRange !== 'current_month') {
+            url.searchParams.set('periode', visualRange);
         } else {
             url.searchParams.delete('periode');
         }
@@ -483,7 +535,7 @@ const Dashboard = () => {
                     <Select
                         label="Datoperiode"
                         size="small"
-                        value={tempDateRange}
+                        value={getVisualDateRange()}
                         onChange={(e) => {
                             const value = e.target.value;
                             if (value === 'custom') {
@@ -493,14 +545,24 @@ const Dashboard = () => {
                                 setCustomStartDate(undefined);
                                 setCustomEndDate(undefined);
                                 setIsDateModalOpen(true);
+                            } else if (value === 'current_month') {
+                                // Force Dec 2025
+                                setTempDateRange('custom');
+                                setCustomStartDate(new Date(2025, 11, 1));
+                                setCustomEndDate(new Date(2025, 11, 31));
+                            } else if (value === 'last_month') {
+                                // Force Nov 2025
+                                setTempDateRange('custom');
+                                setCustomStartDate(new Date(2025, 10, 1));
+                                setCustomEndDate(new Date(2025, 10, 30));
                             } else {
                                 setTempDateRange(value);
                             }
                         }}
                     >
-                        <option value="current_month">Denne måneden</option>
-                        <option value="last_month">Forrige måned</option>
-                        {tempDateRange === 'custom' && customStartDate && customEndDate ? (
+                        <option value="current_month">Desember 2025</option>
+                        <option value="last_month">November 2025</option>
+                        {tempDateRange === 'custom' && customStartDate && customEndDate && getVisualDateRange() === 'custom' ? (
                             <>
                                 <option value="custom">
                                     {`${format(customStartDate, 'dd.MM.yy')} - ${format(customEndDate, 'dd.MM.yy')} `}

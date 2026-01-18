@@ -44,7 +44,7 @@ function getSessionField(chart: SavedChart): string | null {
     if (!chart.sql) return null;
 
     const sql = chart.sql.toLowerCase();
-    if (!sql.includes('public_session')) return null;
+    if (!sql.includes('session')) return null;
 
     for (const field of SESSION_FIELDS) {
         if (sql.includes(`base_query.${field}`) && sql.includes(`group by`)) {
@@ -68,8 +68,8 @@ function buildCombinedSessionQuery(
     filters: Filters,
     fields: string[]
 ): string {
-    const tableName = '`team-researchops-prod-01d6.umami.public_website_event`';
-    const sessionTable = '`team-researchops-prod-01d6.umami.public_session`';
+    const tableName = '`fagtorsdag-prod-81a6.umami_student.event`';
+    const sessionTable = '`fagtorsdag-prod-81a6.umami_student.session`';
 
     // Build the fields string
     const fieldsSelect = fields.map(f => `${sessionTable}.${f}`).join(',\n    ');
@@ -326,7 +326,7 @@ export async function fetchDashboardDataBatched(
 
                 const totalVisitorsSql = `
                     SELECT COUNT(DISTINCT session_id) as total
-                    FROM \`team-researchops-prod-01d6.umami.public_website_event\`
+                    FROM \`fagtorsdag-prod-81a6.umami_student.event\`
                     WHERE website_id = '${websiteId}'
                     AND event_type = 1
                     AND created_at BETWEEN ${fromSql} AND ${toSql}

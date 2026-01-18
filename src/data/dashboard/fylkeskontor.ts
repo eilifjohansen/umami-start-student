@@ -57,10 +57,10 @@ export const fylkeskontorDashboard: DashboardConfig = {
       width: '60',
       sql: `WITH base_query AS (
   SELECT
-    \`team-researchops-prod-01d6.umami.public_website_event\`.*  FROM \`team-researchops-prod-01d6.umami.public_website_event\`
-  WHERE \`team-researchops-prod-01d6.umami.public_website_event\`.website_id = '{{website_id}}'
-  AND \`team-researchops-prod-01d6.umami.public_website_event\`.event_type = 1
-  AND \`team-researchops-prod-01d6.umami.public_website_event\`.url_path = [[ {{url_sti}} --]] '/'
+    \`fagtorsdag-prod-81a6.umami_student.event\`.*  FROM \`fagtorsdag-prod-81a6.umami_student.event\`
+  WHERE \`fagtorsdag-prod-81a6.umami_student.event\`.website_id = '{{website_id}}'
+  AND \`fagtorsdag-prod-81a6.umami_student.event\`.event_type = 1
+  AND \`fagtorsdag-prod-81a6.umami_student.event\`.url_path = [[ {{url_sti}} --]] '/'
   [[AND {{created_at}} ]]
 )
 
@@ -79,10 +79,10 @@ LIMIT 1000`
       width: '40',
       sql: `WITH base_query AS (
   SELECT
-    \`team-researchops-prod-01d6.umami.public_website_event\`.*  FROM \`team-researchops-prod-01d6.umami.public_website_event\`
-  WHERE \`team-researchops-prod-01d6.umami.public_website_event\`.website_id = '{{website_id}}'
-  AND \`team-researchops-prod-01d6.umami.public_website_event\`.event_type = 1
-  AND \`team-researchops-prod-01d6.umami.public_website_event\`.url_path = [[ {{url_sti}} --]] '/'
+    \`fagtorsdag-prod-81a6.umami_student.event\`.*  FROM \`fagtorsdag-prod-81a6.umami_student.event\`
+  WHERE \`fagtorsdag-prod-81a6.umami_student.event\`.website_id = '{{website_id}}'
+  AND \`fagtorsdag-prod-81a6.umami_student.event\`.event_type = 1
+  AND \`fagtorsdag-prod-81a6.umami_student.event\`.url_path = [[ {{url_sti}} --]] '/'
   [[AND {{created_at}} ]]
 )
 
@@ -108,10 +108,10 @@ LIMIT 1000
       width: '50',
       sql: `WITH base_query AS (
   SELECT
-    \`team-researchops-prod-01d6.umami.public_website_event\`.*  FROM \`team-researchops-prod-01d6.umami.public_website_event\`
-  WHERE \`team-researchops-prod-01d6.umami.public_website_event\`.website_id = '{{website_id}}'
-  AND \`team-researchops-prod-01d6.umami.public_website_event\`.event_type = 1
-  AND \`team-researchops-prod-01d6.umami.public_website_event\`.url_path = [[ {{url_sti}} --]] '/'
+    \`fagtorsdag-prod-81a6.umami_student.event\`.*  FROM \`fagtorsdag-prod-81a6.umami_student.event\`
+  WHERE \`fagtorsdag-prod-81a6.umami_student.event\`.website_id = '{{website_id}}'
+  AND \`fagtorsdag-prod-81a6.umami_student.event\`.event_type = 1
+  AND \`fagtorsdag-prod-81a6.umami_student.event\`.url_path = [[ {{url_sti}} --]] '/'
   [[AND {{created_at}} ]]
 )
 
@@ -131,10 +131,10 @@ LIMIT 1000
       width: '50',
       sql: `WITH base_query AS (
   SELECT
-    \`team-researchops-prod-01d6.umami.public_website_event\`.*  FROM \`team-researchops-prod-01d6.umami.public_website_event\`
-  WHERE \`team-researchops-prod-01d6.umami.public_website_event\`.website_id = '{{website_id}}'
-  AND \`team-researchops-prod-01d6.umami.public_website_event\`.event_type = 1
-  AND \`team-researchops-prod-01d6.umami.public_website_event\`.url_path = [[ {{url_sti}} --]] '/'
+    \`fagtorsdag-prod-81a6.umami_student.event\`.*  FROM \`fagtorsdag-prod-81a6.umami_student.event\`
+  WHERE \`fagtorsdag-prod-81a6.umami_student.event\`.website_id = '{{website_id}}'
+  AND \`fagtorsdag-prod-81a6.umami_student.event\`.event_type = 1
+  AND \`fagtorsdag-prod-81a6.umami_student.event\`.url_path = [[ {{url_sti}} --]] '/'
   [[AND {{created_at}} ]]
 )
 
@@ -159,12 +159,12 @@ LIMIT 1000
       width: '50',
       sql: `WITH base_query AS (
   SELECT
-    \`team-researchops-prod-01d6.umami.public_website_event\`.*  FROM \`team-researchops-prod-01d6.umami.public_website_event\`
-  WHERE \`team-researchops-prod-01d6.umami.public_website_event\`.website_id = '{{website_id}}'
-  AND \`team-researchops-prod-01d6.umami.public_website_event\`.url_path = [[ {{url_sti}} --]] '/'
+    \`fagtorsdag-prod-81a6.umami_student.event\`.*  FROM \`fagtorsdag-prod-81a6.umami_student.event\`
+  WHERE \`fagtorsdag-prod-81a6.umami_student.event\`.website_id = '{{website_id}}'
+  AND \`fagtorsdag-prod-81a6.umami_student.event\`.url_path = [[ {{url_sti}} --]] '/'
   [[AND {{created_at}} ]]
-  AND \`team-researchops-prod-01d6.umami.public_website_event\`.event_type = 2
-  AND \`team-researchops-prod-01d6.umami.public_website_event\`.event_name IS NOT NULL
+  AND \`fagtorsdag-prod-81a6.umami_student.event\`.event_type = 2
+  AND \`fagtorsdag-prod-81a6.umami_student.event\`.event_name IS NOT NULL
 )
 
 SELECT
@@ -183,16 +183,16 @@ LIMIT 1000
       width: '50',
       sql: `WITH base_query AS (
   SELECT
-    \`team-researchops-prod-01d6.umami.public_website_event\`.session_id,
-    \`team-researchops-prod-01d6.umami.public_website_event\`.url_path,
-    \`team-researchops-prod-01d6.umami.public_website_event\`.created_at,
-    LEAD(\`team-researchops-prod-01d6.umami.public_website_event\`.url_path) OVER (
-      PARTITION BY \`team-researchops-prod-01d6.umami.public_website_event\`.session_id 
-      ORDER BY \`team-researchops-prod-01d6.umami.public_website_event\`.created_at
+    \`fagtorsdag-prod-81a6.umami_student.event\`.session_id,
+    \`fagtorsdag-prod-81a6.umami_student.event\`.url_path,
+    \`fagtorsdag-prod-81a6.umami_student.event\`.created_at,
+    LEAD(\`fagtorsdag-prod-81a6.umami_student.event\`.url_path) OVER (
+      PARTITION BY \`fagtorsdag-prod-81a6.umami_student.event\`.session_id 
+      ORDER BY \`fagtorsdag-prod-81a6.umami_student.event\`.created_at
     ) AS next_page
-  FROM \`team-researchops-prod-01d6.umami.public_website_event\`
-  WHERE \`team-researchops-prod-01d6.umami.public_website_event\`.website_id = '{{website_id}}'
-  AND \`team-researchops-prod-01d6.umami.public_website_event\`.event_type = 1
+  FROM \`fagtorsdag-prod-81a6.umami_student.event\`
+  WHERE \`fagtorsdag-prod-81a6.umami_student.event\`.website_id = '{{website_id}}'
+  AND \`fagtorsdag-prod-81a6.umami_student.event\`.event_type = 1
   [[AND {{created_at}} ]]
 )
 
@@ -218,13 +218,13 @@ LIMIT 1000
       width: '50',
       sql: `WITH base_query AS (
   SELECT
-    \`team-researchops-prod-01d6.umami.public_website_event\`.*,
-    \`team-researchops-prod-01d6.umami.public_session\`.country  FROM \`team-researchops-prod-01d6.umami.public_website_event\`
+    \`fagtorsdag-prod-81a6.umami_student.event\`.*,
+    \`team-researchops-prod-01d6.umami.public_session\`.country  FROM \`fagtorsdag-prod-81a6.umami_student.event\`
   LEFT JOIN \`team-researchops-prod-01d6.umami.public_session\`
-    ON \`team-researchops-prod-01d6.umami.public_website_event\`.session_id = \`team-researchops-prod-01d6.umami.public_session\`.session_id
-  WHERE \`team-researchops-prod-01d6.umami.public_website_event\`.website_id = '{{website_id}}'
-  AND \`team-researchops-prod-01d6.umami.public_website_event\`.event_type = 1
-  AND \`team-researchops-prod-01d6.umami.public_website_event\`.url_path = [[ {{url_sti}} --]] '/'
+    ON \`fagtorsdag-prod-81a6.umami_student.event\`.session_id = \`team-researchops-prod-01d6.umami.public_session\`.session_id
+  WHERE \`fagtorsdag-prod-81a6.umami_student.event\`.website_id = '{{website_id}}'
+  AND \`fagtorsdag-prod-81a6.umami_student.event\`.event_type = 1
+  AND \`fagtorsdag-prod-81a6.umami_student.event\`.url_path = [[ {{url_sti}} --]] '/'
   [[AND {{created_at}} ]]
 )
 
@@ -245,13 +245,13 @@ LIMIT 1000
       width: '50',
       sql: `WITH base_query AS (
   SELECT
-    \`team-researchops-prod-01d6.umami.public_website_event\`.*,
-    \`team-researchops-prod-01d6.umami.public_session\`.language  FROM \`team-researchops-prod-01d6.umami.public_website_event\`
+    \`fagtorsdag-prod-81a6.umami_student.event\`.*,
+    \`team-researchops-prod-01d6.umami.public_session\`.language  FROM \`fagtorsdag-prod-81a6.umami_student.event\`
   LEFT JOIN \`team-researchops-prod-01d6.umami.public_session\`
-    ON \`team-researchops-prod-01d6.umami.public_website_event\`.session_id = \`team-researchops-prod-01d6.umami.public_session\`.session_id
-  WHERE \`team-researchops-prod-01d6.umami.public_website_event\`.website_id = '{{website_id}}'
-  AND \`team-researchops-prod-01d6.umami.public_website_event\`.event_type = 1
-  AND \`team-researchops-prod-01d6.umami.public_website_event\`.url_path = [[ {{url_sti}} --]] '/'
+    ON \`fagtorsdag-prod-81a6.umami_student.event\`.session_id = \`team-researchops-prod-01d6.umami.public_session\`.session_id
+  WHERE \`fagtorsdag-prod-81a6.umami_student.event\`.website_id = '{{website_id}}'
+  AND \`fagtorsdag-prod-81a6.umami_student.event\`.event_type = 1
+  AND \`fagtorsdag-prod-81a6.umami_student.event\`.url_path = [[ {{url_sti}} --]] '/'
   [[AND {{created_at}} ]]
 )
 
@@ -277,13 +277,13 @@ LIMIT 1000
       width: '50',
       sql: `WITH base_query AS (
   SELECT
-    \`team-researchops-prod-01d6.umami.public_website_event\`.*,
-    \`team-researchops-prod-01d6.umami.public_session\`.device  FROM \`team-researchops-prod-01d6.umami.public_website_event\`
+    \`fagtorsdag-prod-81a6.umami_student.event\`.*,
+    \`team-researchops-prod-01d6.umami.public_session\`.device  FROM \`fagtorsdag-prod-81a6.umami_student.event\`
   LEFT JOIN \`team-researchops-prod-01d6.umami.public_session\`
-    ON \`team-researchops-prod-01d6.umami.public_website_event\`.session_id = \`team-researchops-prod-01d6.umami.public_session\`.session_id
-  WHERE \`team-researchops-prod-01d6.umami.public_website_event\`.website_id = '{{website_id}}'
-  AND \`team-researchops-prod-01d6.umami.public_website_event\`.event_type = 1
-  AND \`team-researchops-prod-01d6.umami.public_website_event\`.url_path = [[ {{url_sti}} --]] '/'
+    ON \`fagtorsdag-prod-81a6.umami_student.event\`.session_id = \`team-researchops-prod-01d6.umami.public_session\`.session_id
+  WHERE \`fagtorsdag-prod-81a6.umami_student.event\`.website_id = '{{website_id}}'
+  AND \`fagtorsdag-prod-81a6.umami_student.event\`.event_type = 1
+  AND \`fagtorsdag-prod-81a6.umami_student.event\`.url_path = [[ {{url_sti}} --]] '/'
   [[AND {{created_at}} ]]
 )
 
@@ -304,13 +304,13 @@ LIMIT 1000
       width: '50',
       sql: `WITH base_query AS (
   SELECT
-    \`team-researchops-prod-01d6.umami.public_website_event\`.*,
-    \`team-researchops-prod-01d6.umami.public_session\`.os  FROM \`team-researchops-prod-01d6.umami.public_website_event\`
+    \`fagtorsdag-prod-81a6.umami_student.event\`.*,
+    \`team-researchops-prod-01d6.umami.public_session\`.os  FROM \`fagtorsdag-prod-81a6.umami_student.event\`
   LEFT JOIN \`team-researchops-prod-01d6.umami.public_session\`
-    ON \`team-researchops-prod-01d6.umami.public_website_event\`.session_id = \`team-researchops-prod-01d6.umami.public_session\`.session_id
-  WHERE \`team-researchops-prod-01d6.umami.public_website_event\`.website_id = '{{website_id}}'
-  AND \`team-researchops-prod-01d6.umami.public_website_event\`.event_type = 1
-  AND \`team-researchops-prod-01d6.umami.public_website_event\`.url_path = [[ {{url_sti}} --]] '/'
+    ON \`fagtorsdag-prod-81a6.umami_student.event\`.session_id = \`team-researchops-prod-01d6.umami.public_session\`.session_id
+  WHERE \`fagtorsdag-prod-81a6.umami_student.event\`.website_id = '{{website_id}}'
+  AND \`fagtorsdag-prod-81a6.umami_student.event\`.event_type = 1
+  AND \`fagtorsdag-prod-81a6.umami_student.event\`.url_path = [[ {{url_sti}} --]] '/'
   [[AND {{created_at}} ]]
 )
 
@@ -330,13 +330,13 @@ LIMIT 1000
       width: '50',
       sql: `WITH base_query AS (
   SELECT
-    \`team-researchops-prod-01d6.umami.public_website_event\`.*,
-    \`team-researchops-prod-01d6.umami.public_session\`.browser  FROM \`team-researchops-prod-01d6.umami.public_website_event\`
+    \`fagtorsdag-prod-81a6.umami_student.event\`.*,
+    \`team-researchops-prod-01d6.umami.public_session\`.browser  FROM \`fagtorsdag-prod-81a6.umami_student.event\`
   LEFT JOIN \`team-researchops-prod-01d6.umami.public_session\`
-    ON \`team-researchops-prod-01d6.umami.public_website_event\`.session_id = \`team-researchops-prod-01d6.umami.public_session\`.session_id
-  WHERE \`team-researchops-prod-01d6.umami.public_website_event\`.website_id = '{{website_id}}'
-  AND \`team-researchops-prod-01d6.umami.public_website_event\`.event_type = 1
-  AND \`team-researchops-prod-01d6.umami.public_website_event\`.url_path = [[ {{url_sti}} --]] '/'
+    ON \`fagtorsdag-prod-81a6.umami_student.event\`.session_id = \`team-researchops-prod-01d6.umami.public_session\`.session_id
+  WHERE \`fagtorsdag-prod-81a6.umami_student.event\`.website_id = '{{website_id}}'
+  AND \`fagtorsdag-prod-81a6.umami_student.event\`.event_type = 1
+  AND \`fagtorsdag-prod-81a6.umami_student.event\`.url_path = [[ {{url_sti}} --]] '/'
   [[AND {{created_at}} ]]
 )
 
@@ -356,13 +356,13 @@ LIMIT 1000
       width: '50',
       sql: `WITH base_query AS (
   SELECT
-    \`team-researchops-prod-01d6.umami.public_website_event\`.*,
-    \`team-researchops-prod-01d6.umami.public_session\`.screen  FROM \`team-researchops-prod-01d6.umami.public_website_event\`
+    \`fagtorsdag-prod-81a6.umami_student.event\`.*,
+    \`team-researchops-prod-01d6.umami.public_session\`.screen  FROM \`fagtorsdag-prod-81a6.umami_student.event\`
   LEFT JOIN \`team-researchops-prod-01d6.umami.public_session\`
-    ON \`team-researchops-prod-01d6.umami.public_website_event\`.session_id = \`team-researchops-prod-01d6.umami.public_session\`.session_id
-  WHERE \`team-researchops-prod-01d6.umami.public_website_event\`.website_id = '{{website_id}}'
-  AND \`team-researchops-prod-01d6.umami.public_website_event\`.event_type = 1
-  AND \`team-researchops-prod-01d6.umami.public_website_event\`.url_path = [[ {{url_sti}} --]] '/'
+    ON \`fagtorsdag-prod-81a6.umami_student.event\`.session_id = \`team-researchops-prod-01d6.umami.public_session\`.session_id
+  WHERE \`fagtorsdag-prod-81a6.umami_student.event\`.website_id = '{{website_id}}'
+  AND \`fagtorsdag-prod-81a6.umami_student.event\`.event_type = 1
+  AND \`fagtorsdag-prod-81a6.umami_student.event\`.url_path = [[ {{url_sti}} --]] '/'
   [[AND {{created_at}} ]]
 )
 

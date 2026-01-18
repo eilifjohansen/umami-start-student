@@ -174,7 +174,7 @@ export const DashboardWidget = ({ chart, websiteId, filters, onDataLoaded, selec
                 const fromSql = `TIMESTAMP('${format(startDate, 'yyyy-MM-dd')}')`;
                 const toSql = `TIMESTAMP('${format(endDate, 'yyyy-MM-dd')}T23:59:59')`;
 
-                const dateReplacement = `AND \`team-researchops-prod-01d6.umami.public_website_event\`.created_at BETWEEN ${fromSql} AND ${toSql}`;
+                const dateReplacement = `AND \`fagtorsdag-prod-81a6.umami_student.event\`.created_at BETWEEN ${fromSql} AND ${toSql}`;
 
                 // Replace the block
                 processedSql = processedSql.replace(/\[\[\s*AND\s*\{\{created_at\}\}\s*\]\]/gi, dateReplacement);
@@ -193,7 +193,7 @@ export const DashboardWidget = ({ chart, websiteId, filters, onDataLoaded, selec
                     // Replace COUNT(DISTINCT) with a percentage calculation
                     // IMPORTANT: Use ALL site visitors as denominator, not just filtered visitors
                     // This makes proportion meaningful when using path filters
-                    const totalSiteVisitorsSubquery = `(SELECT COUNT(DISTINCT session_id) FROM \`team-researchops-prod-01d6.umami.public_website_event\` WHERE website_id = '${websiteId}' AND event_type = 1 AND created_at BETWEEN ${fromSql} AND ${toSql})`;
+                    const totalSiteVisitorsSubquery = `(SELECT COUNT(DISTINCT session_id) FROM \`fagtorsdag-prod-81a6.umami_student.event\` WHERE website_id = '${websiteId}' AND event_type = 1 AND created_at BETWEEN ${fromSql} AND ${toSql})`;
 
                     processedSql = processedSql.replace(
                         /COUNT\s*\(\s*DISTINCT\s+(?:([a-zA-Z_\.]+)\.)?session_id\s*\)\s+as\s+Unike_besokende/gi,

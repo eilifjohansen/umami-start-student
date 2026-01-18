@@ -1,8 +1,7 @@
 import {
   MenuHamburgerIcon,
   ComponentIcon,
-  CogIcon,
-  BarChartIcon
+  CogIcon
 } from "@navikt/aksel-icons";
 import { Button, Dropdown, Link } from "@navikt/ds-react";
 import { useEffect, useState } from "react";
@@ -61,14 +60,6 @@ export default function Header() {
               <Dropdown.Menu.List>
                 <Dropdown.Menu.List.Item
                   as={Link}
-                  href="/dashboards"
-                  className="no-underline"
-                >
-                  <BarChartIcon aria-hidden fontSize="1.5rem" />
-                  <span className="whitespace-nowrap">Dashboard</span>
-                </Dropdown.Menu.List.Item>
-                <Dropdown.Menu.List.Item
-                  as={Link}
                   href="/taksonomi"
                   className="no-underline"
                 >
@@ -90,17 +81,6 @@ export default function Header() {
           <div className="flex items-center justify-between w-full">
             <div className="flex items-center w-full"></div>
             <div className="flex flex-grow">
-              <Button
-                as={Link}
-                variant="tertiary"
-                href="/dashboards"
-                className={linkButton}
-              >
-                <div className="flex items-center gap-2">
-                  <BarChartIcon aria-hidden fontSize="1.5rem" />
-                  <span className="whitespace-nowrap">Dashboard</span>
-                </div>
-              </Button>
               <Button
                 as={Link}
                 variant="tertiary"
